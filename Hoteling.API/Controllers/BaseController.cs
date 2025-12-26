@@ -1,10 +1,12 @@
 using Hoteling.Application.Interfaces;
 using Hoteling.Application.Interfaces.IService;
 using Hoteling.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hoteling.API.Controllers;
 
+//[Authorize]
 public abstract class BaseCrudController<T, TCreateView, TView>
     (IService<T> crudService, ICrudMapper<T, TCreateView, TView> mapper, ILogger logger)
     : ControllerBase

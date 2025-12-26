@@ -1,6 +1,8 @@
+using Hoteling.API.Extensions;
 using Hoteling.Application;
 using Hoteling.Infastructure;
 using Hoteling.Infastructure.Data;
+using Hoteling.Infastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hoteling.API;
@@ -11,6 +13,7 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddAuthentication(builder.Configuration);
         builder.Services.AddAuthorization();
 
         // Layer Extensions
