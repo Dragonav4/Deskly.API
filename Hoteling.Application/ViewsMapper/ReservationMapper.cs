@@ -1,10 +1,15 @@
 using Hoteling.Application.Interfaces;
 using Hoteling.Application.Views.Reservation;
+using Hoteling.Application.Views.Desk;
+using Hoteling.Application.Views.User;
 using Hoteling.Domain.Entities;
 
 namespace Hoteling.Application.ViewsMapper;
 
-public class ReservationMapper : ICrudMapper<Reservation, ReservationCreateView, ReservationView>
+public class ReservationMapper(
+    ICrudMapper<Desk, DeskCreateView, DeskView> deskMapper,
+    ICrudMapper<User, UserCreateView, UserView> userMapper)
+    : ICrudMapper<Reservation, ReservationCreateView, ReservationView>
 {
     public Reservation MapCreateDtoToDomain(ReservationCreateView createDto)
     {
@@ -39,7 +44,9 @@ public class ReservationMapper : ICrudMapper<Reservation, ReservationCreateView,
             DeskId = viewDto.DeskId,
             UserId = viewDto.UserId,
             ReservationDate = viewDto.ReservationDate,
-            CreatedAt = viewDto.CreatedAt
+            CreatedAt = viewDto.CreatedAt,
+            Desk = viewDto.Desk != null ? deskMapper.MapDomainToView(viewDto.Desk) : null,
+            User = viewDto.User != null ? userMapper.MapDomainToView(viewDto.User) : null
         };
     }
 }
