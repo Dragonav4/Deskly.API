@@ -1,9 +1,9 @@
 using Hoteling.API.Options;
 using Hoteling.Domain.Enums;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using System.Security.Claims;
 using Hoteling.Application.Interfaces.IService;
+using Hoteling.Domain.Entities;
 
 namespace Hoteling.API.Extensions;
 
@@ -17,7 +17,7 @@ public static class AddAuthenticationExtension
         services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddCookie(options =>
             {
                 options.Events.OnRedirectToLogin = context =>
@@ -38,6 +38,7 @@ public static class AddAuthenticationExtension
 
                 options.Events.OnCreatingTicket = async context =>
                 {
+                    var pictureUrl = context.User.GetProperty("picture").GetString();
                     var email = context.Principal?.FindFirst(ClaimTypes.Email)?.Value;
                     var name = context.Principal?.FindFirst(ClaimTypes.Name)?.Value;
 
@@ -48,25 +49,28 @@ public static class AddAuthenticationExtension
 
                     if (user == null)
                     {
-                        user = new Domain.Entities.User
+                        user = new User
                         {
                             Id = Guid.NewGuid(),
                             Email = email,
                             UserName = name ?? email,
-                            Role = UserRole.Guest
+                            Role = UserRole.Employee
                         };
                         await userService.CreateAsync(user);
                     }
 
                     var identity = context.Principal?.Identity as ClaimsIdentity;
-                    if (identity != null && user != null)
+                    if (identity != null)
                     {
                         identity.AddClaim(new Claim(ClaimTypes.Role, user.Role.ToString()));
+                        identity.AddClaim(new Claim("picture", pictureUrl ?? ""));
 
-                        if (!identity.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
+                        var existingNameIdentifier = identity.FindFirst(ClaimTypes.NameIdentifier);
+                        if (existingNameIdentifier != null)
                         {
-                            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+                            identity.RemoveClaim(existingNameIdentifier);
                         }
+                        identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
                     }
                 };
             });
