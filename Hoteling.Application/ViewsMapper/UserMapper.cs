@@ -1,11 +1,32 @@
+using System.Security.Claims;
 using Hoteling.Application.Interfaces;
+using Hoteling.Application.Views.Common;
 using Hoteling.Application.Views.User;
+using Hoteling.Domain.Auth;
 using Hoteling.Domain.Entities;
+using Hoteling.Domain.Enums;
 
 namespace Hoteling.Application.ViewsMapper;
 
 public class UserMapper : ICrudMapper<User, UserCreateView, UserView>
 {
+    private static int GetListActions(ClaimsPrincipal user)
+    {
+        var isAdmin = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == UserRole.Admin.ToString();
+        return AuthClaims.ViewAction
+               | (isAdmin ? AuthClaims.EditAction | AuthClaims.DeleteAction : 0);
+    }
+
+    public ActionListView<UserView> MapDomainModelsToListView(IEnumerable<User> domains, int totalCount, ClaimsPrincipal user)
+    {
+        return new ActionListView<UserView>
+        {
+            Items = domains.Select(d => MapDomainToView(d, user)).ToList(),
+            TotalCount = totalCount,
+            Actions = GetListActions(user),
+        };
+    }
+
     public User MapCreateDtoToDomain(UserCreateView createDto)
     {
         return new User
@@ -32,7 +53,7 @@ public class UserMapper : ICrudMapper<User, UserCreateView, UserView>
         };
     }
 
-    public UserView MapDomainToView(User viewDto)
+    public UserView MapDomainToView(User viewDto, ClaimsPrincipal user)
     {
         return new UserView
         {
