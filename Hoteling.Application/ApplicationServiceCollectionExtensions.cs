@@ -15,9 +15,11 @@ public static class ApplicationServiceCollectionExtensions
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         // Services
-        services.AddScoped(typeof(IService<>), typeof(CrudService<>));
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IDeskService, DeskService>();
+        services.AddScoped<IReservationService, ReservationService>();
+        services.AddScoped(typeof(IService<>), typeof(CrudService<>));
+        services.AddScoped<IService<Reservation>, ReservationService>();
         // Mappers
         services.AddScoped<ICrudMapper<Desk, DeskCreateView, DeskView>, DeskMapper>();
         services.AddScoped<ICrudMapper<User, UserCreateView, UserView>, UserMapper>();
