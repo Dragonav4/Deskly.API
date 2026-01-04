@@ -23,9 +23,9 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(r => r.UserId);
 
-        modelBuilder.Entity<Desk>().HasData( //Todo make separate file for seed data in SQL folder
-            new Desk { Id = Guid.Parse("d3e4f5a6-b7c8-4d0e-8f2e-3c4d5e6f7a8b"), DeskNumber = "A-001", Floor = 1, HasDualMonitor = true, IsStandingDesk = false },
-            new Desk { Id = Guid.Parse("a1b2c3d4-e5f6-4080-9000-010203040506"), DeskNumber = "B-005", Floor = 2, HasDualMonitor = false, IsStandingDesk = true }
-        );
+        // modelBuilder.Entity<Desk>().HasData( //Todo make separate file for seed data in SQL folder
+        //     new Desk { Id = Guid.Parse("d3e4f5a6-b7c8-4d0e-8f2e-3c4d5e6f7a8b"), DeskNumber = "A-001", Floor = 1, HasDualMonitor = true, IsStandingDesk = false },
+        //     new Desk { Id = Guid.Parse("a1b2c3d4-e5f6-4080-9000-010203040506"), DeskNumber = "B-005", Floor = 2, HasDualMonitor = false, IsStandingDesk = true }
+        // );
     }
 }

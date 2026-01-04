@@ -1,10 +1,9 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using Hoteling.API.Extensions;
 using Hoteling.Application;
-using Hoteling.Infastructure;
 using Hoteling.API.Exceptions;
 using Hoteling.Infastructure.Data;
+using Hoteling.Infastructure.Data.Configuration;
 using Hoteling.Infastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +16,6 @@ public static class Program
         Env.Load();
         var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
         var builder = WebApplication.CreateBuilder(args);
-
         builder.Services.AddAuthentication(builder.Configuration);
         builder.Services.AddAuthorization();
 
@@ -63,6 +61,7 @@ public static class Program
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             db.Database.Migrate();
+            DbInitializer.Seed(db);
         }
 
         app.Run();
