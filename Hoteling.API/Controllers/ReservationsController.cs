@@ -31,7 +31,8 @@ public class ReservationsController(
         }
 
         createDto.UserId = userGuid;
-        return await base.CreateAsync(createDto);
+        var result = await base.CreateAsync(createDto);
+        return result;
     }
 
 

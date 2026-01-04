@@ -71,6 +71,7 @@ public class DeskMapper(
             Floor = domain.Floor,
             HasDualMonitor = domain.HasDualMonitor,
             IsStandingDesk = domain.IsStandingDesk,
+            IsOccupied = reservation != null,
             Actions = GetItemActions(user),
             ReservedByUserName = isUser ? reservation?.User?.UserName : null,
             ReservationDate = isUser ? reservation?.ReservationDate : null,

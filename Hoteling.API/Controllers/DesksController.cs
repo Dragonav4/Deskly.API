@@ -23,7 +23,6 @@ public class DesksController(
     {
         return base.GetAllAsync(skip, take);
     }
-
     [HttpGet("{id:guid}")]
     [AllowAnonymous]
     public override Task<ActionResult<DeskView>> GetById(Guid id)

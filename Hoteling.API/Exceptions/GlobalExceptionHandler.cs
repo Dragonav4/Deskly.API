@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Hoteling.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,7 +47,7 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
             BasicExceptions ex => ((int)ex.StatusCode, ex.ErrorCode, ex.Message),
             OperationCanceledException => (499, "CANCELLED", "Request was cancelled"),
             UnauthorizedAccessException => (401, "UNAUTHORIZED", "Unauthorized access"),
-
+            DeskOccupiedException ex => (409, ex.ErrorCode, ex.Message),
             _ => (500, "INTERNAL_SERVER_ERROR", "An unexpected error occurred.")
         };
     }
