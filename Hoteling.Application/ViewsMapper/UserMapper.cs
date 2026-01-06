@@ -21,7 +21,7 @@ public class UserMapper : ICrudMapper<User, UserCreateView, UserView>
     {
         return new ActionListView<UserView>
         {
-            Items = domains.Select(d => MapDomainToView(d, user)).ToList(),
+            Items = domains.Select(d => MapDomainToView(d, user)).OrderByDescending(r => r.Role).ToList(),
             TotalCount = totalCount,
             Actions = GetListActions(user),
         };
@@ -33,7 +33,7 @@ public class UserMapper : ICrudMapper<User, UserCreateView, UserView>
         {
             Id = Guid.NewGuid(),
             Email = createDto.Email,
-            UserName = createDto.UserName,
+            UserName = createDto.Username,
             Role = createDto.Role
         };
     }
@@ -45,19 +45,25 @@ public class UserMapper : ICrudMapper<User, UserCreateView, UserView>
         {
             Id = id,
             Email = viewDto.Email,
-            UserName = viewDto.UserName,
+            UserName = viewDto.Username,
             Role = viewDto.Role
         };
     }
 
-    public UserView MapDomainToView(User viewDto, ClaimsPrincipal user)
+    public UserView MapDomainToView(User domain, ClaimsPrincipal user)
     {
         return new UserView
         {
-            Id = viewDto.Id,
-            Email = viewDto.Email,
-            UserName = viewDto.UserName,
-            Role = viewDto.Role
+            Id = domain.Id,
+            Email = domain.Email,
+            Username = domain.UserName,
+            Role = domain.Role,
+            Actions = GetItemActions(user)
         };
+    }
+
+    private static int GetItemActions(ClaimsPrincipal user)
+    {
+        return GetListActions(user);
     }
 }

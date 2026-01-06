@@ -7,7 +7,7 @@ namespace Hoteling.Application.Views.User;
 public class UserCreateView
 {
     [Required]
-    public string UserName { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
 
     [Required]
     [EmailAddress]
@@ -20,4 +20,5 @@ public class UserCreateView
 public class UserView : UserCreateView, IHasId
 {
     public Guid Id { get; set; }
+    public int Actions { get; set; }
 }
