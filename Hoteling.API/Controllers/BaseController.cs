@@ -1,4 +1,5 @@
 using Hoteling.API.Exceptions;
+using Hoteling.Application.Exceptions;
 using Hoteling.Application.Interfaces;
 using Hoteling.Application.Interfaces.IService;
 using Hoteling.Application.Views.Common;

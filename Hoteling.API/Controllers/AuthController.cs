@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Hoteling.API.Exceptions;
+using Hoteling.Application.Exceptions;
 using Hoteling.Application.Interfaces.IService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

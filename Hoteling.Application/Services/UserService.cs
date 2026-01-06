@@ -17,10 +17,24 @@ public class UserService(IUserRepository repository) : CrudService<User>(reposit
         var existingUserWithSameUsername = await repository.GetByUsernameAsync(updateDto.UserName);
         if (existingUserWithSameUsername != null && existingUserWithSameUsername.Id != updateDto.Id)
         {
-            throw new UserNameException($"Username '{updateDto.UserName}' is already taken by another user.");
+            throw new ConflictException($"Username '{updateDto.UserName}' is already taken by another user.");
         }
 
         return await base.UpdateAsync(updateDto, cancellationToken);
+    }
+
+    public async override Task<User> CreateAsync(User createModelDto, CancellationToken cancellationToken = default)
+    {
+        await userValidateAsync(createModelDto);
+        return await base.CreateAsync(createModelDto, cancellationToken);
+    }
+
+    private async Task userValidateAsync(User createModelDto)
+    {
+        var existingUserWithSameUsername = await repository.GetByUsernameAsync(createModelDto.UserName);
+        var existingUserWithSameEmail = await repository.GetByEmailAsync(createModelDto.Email);
+        if(existingUserWithSameUsername != null) throw new ConflictException($"Username '{createModelDto.UserName}' is already taken by another user.");
+        if(existingUserWithSameEmail != null) throw new ConflictException($"Email '{createModelDto.Email}' is already taken by another user.");
     }
 }
 

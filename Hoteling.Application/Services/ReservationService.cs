@@ -14,7 +14,7 @@ public class ReservationService(IReservationRepository repository)
 
         if (existingReservations.Any())
         {
-            throw new DeskOccupiedException(
+            throw new ConflictException(
                 $"Desk is already occupied on {model.ReservationDate:yyyy-MM-dd}"
             );
         }
