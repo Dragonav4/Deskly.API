@@ -1,7 +1,7 @@
 # Hoteling System - Backend
 This repository contains the server-side implementation of the Hoteling System.
 ## Technologies
-- **C# / .NET 9** - Core platform.
+- **C# / .NET 8** - Core platform.
 - **ASP.NET Core Web API** - RESTful services.
 - **Entity Framework Core** - ORM for database operations.
 - **SQLite** - Database (local file `hoteling.db`).
@@ -10,7 +10,7 @@ This repository contains the server-side implementation of the Hoteling System.
 - **DotNetEnv** - Environment variable management via `.env`.
 ## Installation and Configuration
 ### Prerequisites
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 ### Clone and Dependencies
 1. Navigate to the project directory:
    ```bash
