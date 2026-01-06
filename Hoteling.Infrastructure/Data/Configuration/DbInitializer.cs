@@ -14,7 +14,6 @@ public static class DbInitializer
                 Id = Guid.Parse("3AE864DD-1AE5-4919-9F9C-E7486C9AE41C"),
                 UserName = "Danyil Danilian",
                 Email = "s31722@pjwstk.edu.pl",
-                PasswordHash = "",
                 Role = UserRole.Admin
             };
             context.Users.Add(admin);
