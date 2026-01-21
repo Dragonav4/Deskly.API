@@ -32,7 +32,23 @@ public static class Program
                 o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+            {
+                Title = "Hoteling System API",
+                Version = "v1",
+                Description = "API for managing desk reservations in a hoteling system"
+            });
+
+            // Enable XML comments for better documentation
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            if (File.Exists(xmlPath))
+            {
+                options.IncludeXmlComments(xmlPath);
+            }
+        });
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: myAllowSpecificOrigins,
@@ -50,11 +66,13 @@ public static class Program
         var app = builder.Build();
         app.UseCors(myAllowSpecificOrigins);
         app.UseExceptionHandler();
-        if (app.Environment.IsDevelopment())
+
+        // Enable Swagger for OpenAPI generation
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hoteling API v1");
+        });
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();

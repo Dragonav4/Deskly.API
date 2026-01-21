@@ -14,6 +14,11 @@ namespace Hoteling.API.Controllers;
 [AllowAnonymous]
 public class AuthController(IUserService userService) : ControllerBase
 {
+    /// <summary>
+    /// Initiates Google OAuth login flow
+    /// </summary>
+    /// <param name="returnUrl">Optional URL to redirect after successful login</param>
+    /// <returns>Redirect to Google OAuth</returns>
     [HttpGet("login")]
     public IActionResult Login([FromQuery] string? returnUrl)
     {
@@ -24,6 +29,11 @@ public class AuthController(IUserService userService) : ControllerBase
             }, GoogleDefaults.AuthenticationScheme);
     }
 
+    /// <summary>
+    /// Logs out the current user and clears authentication cookies
+    /// </summary>
+    /// <param name="returnUrl">Optional URL to redirect after logout</param>
+    /// <returns>Redirect to specified URL or default frontend</returns>
     [HttpGet("logout")]
     public async Task<IActionResult> Logout([FromQuery] string? returnUrl)
     {
@@ -32,6 +42,10 @@ public class AuthController(IUserService userService) : ControllerBase
         return Redirect(redirectUri);
     }
 
+    /// <summary>
+    /// Gets the currently authenticated user's information
+    /// </summary>
+    /// <returns>Current user details including ID, email, username, role, and picture</returns>
     [HttpGet("me")]
     [Authorize]
     public async Task<IActionResult> GetCurrentUser()

@@ -17,12 +17,23 @@ public class DesksController(
     ILogger<DesksController> logger)
     : BaseCrudController<Desk, DeskCreateView, DeskView>(service, mapper, logger)
 {
+    /// <summary>
+    /// Gets a paginated list of all desks
+    /// </summary>
+    /// <param name="skip">Number of items to skip for pagination</param>
+    /// <param name="take">Number of items to take for pagination</param>
+    /// <returns>Paginated list of desks with availability status</returns>
     [HttpGet]
     [AllowAnonymous]
     public override Task<ActionResult<ActionListView<DeskView>>> GetAllAsync(int? skip = null, int? take = null)
     {
         return base.GetAllAsync(skip, take);
     }
+    /// <summary>
+    /// Gets a specific desk by its ID
+    /// </summary>
+    /// <param name="id">Desk unique identifier</param>
+    /// <returns>Desk details including availability and reservation info</returns>
     [HttpGet("{id:guid}")]
     [AllowAnonymous]
     public override Task<ActionResult<DeskView>> GetById(Guid id)
