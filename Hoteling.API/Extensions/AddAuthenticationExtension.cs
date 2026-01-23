@@ -39,10 +39,17 @@ public static class AddAuthenticationExtension
                 options.Events.OnCreatingTicket = async context =>
                 {
                     var pictureUrl = context.User.GetProperty("picture").GetString();
-                    var email = context.Principal?.FindFirst(ClaimTypes.Email)?.Value;
+
+                    // Fallback for email claim (standard vs google specific)
+                    var email = context.Principal?.FindFirst(ClaimTypes.Email)?.Value
+                                ?? context.Principal?.FindFirst("email")?.Value;
+
                     var name = context.Principal?.FindFirst(ClaimTypes.Name)?.Value;
 
-                    if (string.IsNullOrEmpty(email)) return;
+                    if (string.IsNullOrEmpty(email))
+                    {
+                        return;
+                    }
 
                     var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                     var user = await userService.GetUserByEmail(email);
