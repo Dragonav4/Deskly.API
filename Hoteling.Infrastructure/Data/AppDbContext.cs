@@ -1,7 +1,7 @@
 using Hoteling.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hoteling.Infastructure.Data;
+namespace Hoteling.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {

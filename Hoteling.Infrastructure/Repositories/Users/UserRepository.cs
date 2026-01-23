@@ -1,9 +1,9 @@
 using Hoteling.Application.Interfaces.IRepository;
 using Hoteling.Domain.Entities;
-using Hoteling.Infastructure.Data;
+using Hoteling.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hoteling.Infastructure.Repositories.Users;
+namespace Hoteling.Infrastructure.Repositories.Users;
 
 
 public class UserRepository(AppDbContext dbContext) : CrudRepository<User>(dbContext), IUserRepository

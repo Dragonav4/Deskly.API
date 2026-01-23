@@ -1,9 +1,9 @@
 using Hoteling.Application.Interfaces.IRepository;
 using Hoteling.Domain.Entities;
-using Hoteling.Infastructure.Data;
+using Hoteling.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hoteling.Infastructure.Repositories.Reservations;
+namespace Hoteling.Infrastructure.Repositories.Reservations;
 
 public class ReservationRepository(AppDbContext dbContext) : CrudRepository<Reservation>(dbContext), IReservationRepository
 {

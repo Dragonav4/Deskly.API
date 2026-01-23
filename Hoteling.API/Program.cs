@@ -2,10 +2,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Hoteling.API.Extensions;
 using Hoteling.Application;
-using Hoteling.Infastructure;
+using Hoteling.Infrastructure;
 using Hoteling.API.Exceptions;
-using Hoteling.Infastructure.Data;
-using Hoteling.Infastructure.Extensions;
+using Hoteling.Infrastructure.Data;
+using Hoteling.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hoteling.API;

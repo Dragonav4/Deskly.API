@@ -1,17 +1,17 @@
 using Hoteling.Application.Interfaces.IRepository;
 using Hoteling.Domain.Entities;
-using Hoteling.Infastructure.Data;
-using Hoteling.Infastructure.Options;
-using Hoteling.Infastructure.Repositories;
-using Hoteling.Infastructure.Repositories.Desks;
-using Hoteling.Infastructure.Repositories.Reservations;
-using Hoteling.Infastructure.Repositories.Users;
+using Hoteling.Infrastructure.Data;
+using Hoteling.Infrastructure.Options;
+using Hoteling.Infrastructure.Repositories;
+using Hoteling.Infrastructure.Repositories.Desks;
+using Hoteling.Infrastructure.Repositories.Reservations;
+using Hoteling.Infrastructure.Repositories.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Hoteling.Infastructure.Extensions;
+namespace Hoteling.Infrastructure.Extensions;
 
 public static class InfrastructureServiceCollectionExtensions
 {
@@ -24,7 +24,15 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddDbContext<AppDbContext>((serviceProvider, options) =>
         {
             var dbOptions = serviceProvider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
-            options.UseSqlite(dbOptions.ConnectionString);
+            
+            if (dbOptions.UsePostgres)
+            {
+                options.UseNpgsql(dbOptions.PostgresConnection);
+            }
+            else
+            {
+                options.UseSqlite(dbOptions.ConnectionString);
+            }
         });
 
         // Repositories

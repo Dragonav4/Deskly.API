@@ -1,9 +1,9 @@
 using Hoteling.Application.Interfaces.IRepository;
 using Hoteling.Domain.Interfaces;
-using Hoteling.Infastructure.Data;
+using Hoteling.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hoteling.Infastructure.Repositories;
+namespace Hoteling.Infrastructure.Repositories;
 
 public class CrudRepository<T>(AppDbContext dbContext) : ICrudRepository<T> where T : class, IHasId
 {
