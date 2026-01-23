@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-backend
+  labels:
+    app: hoteling-backend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: hoteling-backend
+  template:
+    metadata:
+      labels:
+        app: hoteling-backend
+    spec:
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          ports:
+            - containerPort: 5126
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}
