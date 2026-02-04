@@ -15,6 +15,7 @@ RUN dotnet publish "Hoteling.API/Hoteling.API.csproj" -c Release -o /app/out
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build-env /app/out .
+COPY Hoteling.API/.env .
 
 # Create directory for SQLite if used
 RUN mkdir -p /app/data
