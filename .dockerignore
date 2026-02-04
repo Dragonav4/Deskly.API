@@ -1,0 +1,14 @@
+**/.git
+**/.idea
+**/.vscode
+**/bin
+**/obj
+**/node_modules
+*.sln.DotSettings.user
+.DS_Store
+charts
+docs
+scripts
+hoteling.db
+hoteling.db-shm
+hoteling.db-wal
