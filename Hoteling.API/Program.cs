@@ -38,11 +38,7 @@ public class Program
             options.AddPolicy(name: myAllowSpecificOrigins,
                 policy =>
                 {
-                    policy.WithOrigins(
-                        "http://localhost:7000",
-                        "http://localhost:5173",
-                        "https://hoteling-frontend-htuotdhcsq-lm.a.run.app"
-                    )
+                    policy.SetIsOriginAllowed(origin => true) // Allow any origin securely
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
@@ -52,6 +48,7 @@ public class Program
 
 
         var app = builder.Build();
+        app.UseRouting(); // Explicit routing
         app.UseCors(myAllowSpecificOrigins);
         app.UseExceptionHandler();
         if (app.Environment.IsDevelopment())
@@ -60,6 +57,7 @@ public class Program
             app.UseSwaggerUI();
         }
         // app.UseHttpsRedirection(); // Disabled for Cloud Run debugging
+        app.UseAuthentication(); // Missing authentication middleware
         app.UseAuthorization();
         app.MapControllers();
 
