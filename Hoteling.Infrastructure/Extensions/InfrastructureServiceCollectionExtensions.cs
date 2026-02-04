@@ -7,6 +7,7 @@ using Hoteling.Infrastructure.Repositories.Desks;
 using Hoteling.Infrastructure.Repositories.Reservations;
 using Hoteling.Infrastructure.Repositories.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -25,6 +26,8 @@ public static class InfrastructureServiceCollectionExtensions
         {
             var dbOptions = serviceProvider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
             
+            options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
+
             if (dbOptions.UsePostgres)
             {
                 options.UseNpgsql(dbOptions.PostgresConnection);
