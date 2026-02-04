@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hoteling.API;
 using DotNetEnv;
-public static class Program
+public class Program
 {
     public static void Main(string[] args)
     {
@@ -55,14 +55,23 @@ public static class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        app.UseHttpsRedirection();
+        // app.UseHttpsRedirection(); // Disabled for Cloud Run debugging
         app.UseAuthorization();
         app.MapControllers();
 
         using (var scope = app.Services.CreateScope())
         {
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            db.Database.Migrate();
+            try
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                db.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "CRITICAL: Database Migration Failed!");
+                Console.WriteLine($"CRITICAL ERROR: {ex.Message}");
+            }
         }
 
         app.Run();
