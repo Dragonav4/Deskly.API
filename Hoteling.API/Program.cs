@@ -38,7 +38,11 @@ public class Program
             options.AddPolicy(name: myAllowSpecificOrigins,
                 policy =>
                 {
-                    policy.WithOrigins("http://localhost:7000")
+                    policy.WithOrigins(
+                        "http://localhost:7000",
+                        "http://localhost:5173",
+                        "https://hoteling-frontend-htuotdhcsq-lm.a.run.app"
+                    )
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
