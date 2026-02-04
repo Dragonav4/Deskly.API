@@ -17,11 +17,16 @@ public class UserMapper : ICrudMapper<User, UserCreateView, UserView>
                | (isAdmin ? AuthClaims.EditAction | AuthClaims.DeleteAction : 0);
     }
 
-    public ActionListView<UserView> MapDomainModelsToListView(IEnumerable<User> domains, int totalCount, ClaimsPrincipal user)
+    public async Task<ActionListView<UserView>> MapDomainModelsToListView(IEnumerable<User> domains, int totalCount, ClaimsPrincipal user)
     {
+        var items = new List<UserView>();
+        foreach (var d in domains)
+        {
+            items.Add(await MapDomainToView(d, user));
+        }
         return new ActionListView<UserView>
         {
-            Items = domains.Select(d => MapDomainToView(d, user)).ToList(),
+            Items = items,
             TotalCount = totalCount,
             Actions = GetListActions(user),
         };
@@ -53,15 +58,15 @@ public class UserMapper : ICrudMapper<User, UserCreateView, UserView>
         };
     }
 
-    public UserView MapDomainToView(User viewDto, ClaimsPrincipal user)
+    public Task<UserView> MapDomainToView(User viewDto, ClaimsPrincipal user)
     {
-        return new UserView
+        return Task.FromResult(new UserView
         {
             Id = viewDto.Id,
             Email = viewDto.Email,
             UserName = viewDto.UserName,
             Role = viewDto.Role,
             Password = "" // Don't return hash
-        };
+        });
     }
 }

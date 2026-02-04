@@ -13,9 +13,13 @@ public class DeskMapper(
     IReservationRepository reservationRepository)
     : ICrudMapper<Desk, DeskCreateView, DeskView>
 {
-    public ActionListView<DeskView> MapDomainModelsToListView(IEnumerable<Desk> domainModels, int totalCount, ClaimsPrincipal user)
+    public async Task<ActionListView<DeskView>> MapDomainModelsToListView(IEnumerable<Desk> domainModels, int totalCount, ClaimsPrincipal user)
     {
-        var items = domainModels.Select(item => MapDomainToView(item, user)).ToList();
+        var items = new List<DeskView>();
+        foreach (var item in domainModels)
+        {
+            items.Add(await MapDomainToView(item, user));
+        }
         return new ActionListView<DeskView>
         {
             Items = items,
@@ -56,12 +60,11 @@ public class DeskMapper(
         };
     }
 
-    public DeskView MapDomainToView(Desk domain, ClaimsPrincipal user)
+    public async Task<DeskView> MapDomainToView(Desk domain, ClaimsPrincipal user)
     {
-        var reservation = reservationRepository
-            .GetByDateAndDeskAsync(DateTime.Today, domain.Id)
-            .Result
-            .FirstOrDefault();
+        var reservations = await reservationRepository
+            .GetByDateAndDeskAsync(DateTime.Today, domain.Id);
+        var reservation = reservations.FirstOrDefault();
 
         var isUser = user.Identity?.IsAuthenticated ?? false;
         var result = new DeskView

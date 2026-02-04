@@ -23,7 +23,7 @@ public abstract class BaseCrudController<T, TCreateView, TView>
         var input = mapper.MapCreateDtoToDomain(createDto);
         var domain = await service.CreateAsync(input);
         OnItemCreated(domain);
-        var result = mapper.MapDomainToView(domain, User);
+        var result = await mapper.MapDomainToView(domain, User);
         Logger.LogInformation("{EntityName} created with ID {Id}", typeof(T).Name, domain.Id);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
@@ -43,7 +43,7 @@ public abstract class BaseCrudController<T, TCreateView, TView>
         }
 
         OnItemUpdated(domain);
-        var result = mapper.MapDomainToView(domain, User);
+        var result = await mapper.MapDomainToView(domain, User);
         Logger.LogInformation("{EntityName} with ID {Id} updated successfully", typeof(T).Name, id);
         return Ok(result);
     }
@@ -72,7 +72,7 @@ public abstract class BaseCrudController<T, TCreateView, TView>
             throw new NotFoundException($"{typeof(T).Name} with ID {id} not found");
         }
 
-        var result = mapper.MapDomainToView(domain, User);
+        var result = await mapper.MapDomainToView(domain, User);
         return Ok(result);
     }
 
@@ -82,7 +82,7 @@ public abstract class BaseCrudController<T, TCreateView, TView>
         Logger.LogInformation("Getting all {EntityName}s", typeof(T).Name);
         var (items, totalCount) = await service.GetAllAsync(skip, take);
 
-        var result = mapper.MapDomainModelsToListView(items, totalCount, User);
+        var result = await mapper.MapDomainModelsToListView(items, totalCount, User);
         return Ok(result);
     }
 

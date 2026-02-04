@@ -15,11 +15,16 @@ public class ReservationMapper(
     ICrudMapper<User, UserCreateView, UserView> userMapper)
     : ICrudMapper<Reservation, ReservationCreateView, ReservationView>
 {
-    public ActionListView<ReservationView> MapDomainModelsToListView(IEnumerable<Reservation> domains, int totalCount, ClaimsPrincipal user)
+    public async Task<ActionListView<ReservationView>> MapDomainModelsToListView(IEnumerable<Reservation> domains, int totalCount, ClaimsPrincipal user)
     {
+        var items = new List<ReservationView>();
+        foreach (var d in domains)
+        {
+            items.Add(await MapDomainToView(d, user));
+        }
         return new ActionListView<ReservationView>
         {
-            Items = domains.Select(d => MapDomainToView(d, user)).OrderBy(d => d.ReservationDate).ToList(),
+            Items = items.OrderBy(d => d.ReservationDate).ToList(),
             TotalCount = totalCount,
             Actions = GetListActions(user),
         };
@@ -60,7 +65,7 @@ public class ReservationMapper(
         };
     }
 
-    public ReservationView MapDomainToView(Reservation domain, ClaimsPrincipal user)
+    public async Task<ReservationView> MapDomainToView(Reservation domain, ClaimsPrincipal user)
     {
         var isAuthenticated = user.Identity?.IsAuthenticated ?? false;
         return new ReservationView
@@ -70,8 +75,8 @@ public class ReservationMapper(
             UserId = domain.UserId,
             ReservationDate = domain.ReservationDate,
             CreatedAt = domain.CreatedAt,
-            Desk = domain.Desk != null ? deskMapper.MapDomainToView(domain.Desk, user) : null,
-            User = (isAuthenticated && domain.User != null) ? userMapper.MapDomainToView(domain.User, user) : null,
+            Desk = domain.Desk != null ? await deskMapper.MapDomainToView(domain.Desk, user) : null,
+            User = (isAuthenticated && domain.User != null) ? await userMapper.MapDomainToView(domain.User, user) : null,
             Actions = GetItemActions(domain, user)
         };
     }
