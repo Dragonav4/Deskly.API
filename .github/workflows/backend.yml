@@ -54,4 +54,5 @@ jobs:
           env_vars: |-
             ASPNETCORE_URLS=http://+:8080
             ASPNETCORE_ENVIRONMENT=Development
-            Database__ConnectionStrings__DefaultConnection=${{ secrets.GCP_DB_CONNECTION_STRING }}
+            Database__UsePostgres=true
+            Database__PostgresConnection=${{ secrets.GCP_DB_CONNECTION_STRING }}

@@ -20,7 +20,7 @@ COPY --from=build-env /app/out .
 RUN mkdir -p /app/data
 
 # Environment variables
-ENV ASPNETCORE_URLS=http://+:5126
-EXPOSE 5126
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "Hoteling.API.dll"]
