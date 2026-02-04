@@ -56,3 +56,5 @@ jobs:
             ASPNETCORE_ENVIRONMENT=Development
             Database__UsePostgres=true
             Database__PostgresConnection=${{ secrets.GCP_DB_CONNECTION_STRING }}
+            AuthOptions__Google__ClientId=${{ secrets.GOOGLE_CLIENT_ID }}
+            AuthOptions__Google__ClientSecret=${{ secrets.GOOGLE_CLIENT_SECRET }}
